@@ -6,6 +6,15 @@ const tours = JSON.parse(
 );
 
 //Functions
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res
+      .status(400)
+      .json({ status: 'fail', message: 'Include Body and Name' });
+  }
+  next();
+};
+
 exports.checkId = (req, res, next, val) => {
   console.log(`Tour id is ${val}`);
 
