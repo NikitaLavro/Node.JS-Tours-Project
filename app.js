@@ -1,11 +1,15 @@
 //Core
 const fs = require('fs');
 
+//Dependencies
+const morgan = require('morgan');
+
 //Express
 const express = require('express');
 const app = express();
 
-//Middleware
+//Middlewares
+app.use(morgan('dev'));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -114,6 +118,7 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+//Server
 const port = 80;
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
