@@ -42,7 +42,16 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a price'],
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      validate: {
+        message: 'Discount price ({VALUE}) should be below the regular price',
+        validator: function (val) {
+          //this only points to current doc on NEW document creation
+          return val < this.price;
+        },
+      },
+    },
     summary: {
       type: String,
       trim: true,
@@ -78,7 +87,7 @@ tourSchema.virtual('durationWeeks').get(function () {
   return (this.duration / 7).toFixed(2);
 });
 
-//DOCUMENT MIDDLEWARE
+//DOCUMENT MIDDLEWARE : runs before .save() and .create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
