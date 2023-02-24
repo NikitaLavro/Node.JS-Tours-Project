@@ -18,6 +18,8 @@ app.use((req, res, next) => {
   next();
 });
 
+const AppError = require('./utils/appError');
+
 //Router
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
@@ -31,6 +33,7 @@ app.all('*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err.stack);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
