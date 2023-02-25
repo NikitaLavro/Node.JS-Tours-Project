@@ -26,6 +26,7 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  err.isOperational = true;
   if (err.isOperational) {
     console.log('ERROR OP', err);
     //Operational, trusted error: send message to the client

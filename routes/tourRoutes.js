@@ -16,7 +16,7 @@ const {
 //router.param('id', checkId);
 
 //Router
-router.route('/montly-plan/:year').get(getMonthlyPlan);
+router.route('/monthly-plan/:year').get(getMonthlyPlan);
 router.route('/tour-stats').get(getTourStats);
 router.route('/top-5-cheap').get(aliasTopCheapTours, getAllTours);
 router.route('/').get(getAllTours).post(createTour);
