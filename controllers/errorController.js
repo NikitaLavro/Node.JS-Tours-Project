@@ -32,7 +32,7 @@ const sendErrorProd = (err, res) => {
     //Operational, trusted error: send message to the client
     res.status(err.statusCode).json({
       status: err.status,
-      message: err,
+      message: err.message || Object.entries(err.errors)[0][1].message, //TEMPORARY ERROR HANDLING FIX
     });
   } else {
     //Programming or other unknown error: don't leak error details
