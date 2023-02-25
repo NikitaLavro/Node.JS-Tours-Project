@@ -26,13 +26,12 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
-  err.isOperational = true;
   if (err.isOperational) {
     console.log('ERROR OP', err);
     //Operational, trusted error: send message to the client
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message || Object.entries(err.errors)[0][1].message, //TEMPORARY ERROR HANDLING FIX
+      message: err.message || Object.entries(err.errors)[0][1].message || err, //TEMPORARY ERROR HANDLING FIX
     });
   } else {
     //Programming or other unknown error: don't leak error details
