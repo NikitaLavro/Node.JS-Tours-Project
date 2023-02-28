@@ -150,7 +150,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.resetPassword = CatchAsync(async (req, res, next) => {
+exports.resetPassword = catchAsync(async (req, res, next) => {
   //1) Get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
@@ -173,5 +173,11 @@ exports.resetPassword = CatchAsync(async (req, res, next) => {
   await user.save();
 
   //3) Updated changedPasswordAt property for the user
+
   //4) Log the user in, send JWT
+  const token = signToken(user._id);
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
 });
