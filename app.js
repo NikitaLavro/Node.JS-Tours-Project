@@ -44,6 +44,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(mongoSanitize());
 
 //Data sanitization against XXS attacks
+app.use(xss());
 
 //Test middleware
 app.use((req, res, next) => {
