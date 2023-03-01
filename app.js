@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const hpp = require('hpp');
 
 //APP IMPORTS
 const AppError = require('./utils/appError');
@@ -52,6 +53,21 @@ app.use((req, res, next) => {
   next();
 });
 
+//Prevent param pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  })
+);
+
+//Global error handling
 app.use(globalErrorHandler);
 
 //APP ROUTER
