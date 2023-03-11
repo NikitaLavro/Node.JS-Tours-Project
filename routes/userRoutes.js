@@ -10,6 +10,7 @@ const {
   deleteUser,
   updateMe,
   deleteMe,
+  getMe,
 } = require('../controllers/userController');
 
 const {
@@ -22,6 +23,7 @@ const {
 } = require('../controllers/authController');
 
 //Router
+router.get('/me', protect, getMe, getUser);
 router.post('/signup', signup);
 router.post('/login', login);
 
