@@ -11,6 +11,7 @@ const {
   aliasTopCheapTours,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin,
 } = require('../controllers/tourController');
 
 const { protect, restrictTo } = require('../controllers/authController');
@@ -27,6 +28,11 @@ router
   .get(protect, restrictTo('admin', 'lead-guide', 'guide'), getMonthlyPlan);
 router.route('/tour-stats').get(getTourStats);
 router.route('/top-5-cheap').get(aliasTopCheapTours, getAllTours);
+
+router.route('/tours-within/:distance/center/:latlng/:unit', getToursWithin);
+//tours-distance?distance=233&center=-40,45&unit=mi
+//tours-distance/233/center/-40,45/unit/mi
+
 router
   .route('/')
   .get(getAllTours)
