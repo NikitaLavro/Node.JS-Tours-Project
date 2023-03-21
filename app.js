@@ -1,5 +1,6 @@
 //EXPRESS IMPORTS
 const express = require('express');
+const path = require('path');
 
 //DEPENDENCIES
 const morgan = require('morgan');
@@ -40,7 +41,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json({ limit: '10kb' }));
 
 //Serving static files
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -68,10 +69,17 @@ app.use(
   })
 );
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 //Global error handling
 app.use(globalErrorHandler);
 
 //APP ROUTER
+app.get('/', (req, res) => {
+  res.status(200).render('base');
+});
+
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
