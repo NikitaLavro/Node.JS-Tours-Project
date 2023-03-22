@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/', getOverview);
+router.get('/dick', getOverview);
 router.get('/tour', getTour);
 
 module.exports = router;
