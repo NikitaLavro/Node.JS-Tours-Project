@@ -10,7 +10,7 @@ mapboxgl.accessToken =
 const map = new mapboxgl.Map({
   container: 'map', // container ID
   style: 'mapbox://styles/soulshard/clfrcf9th011501pe6krhexfc', // style URL
-  center: [-74.5, 40], // starting position [lng, lat]
+  scrollZoom: false,
 });
 
 const bounds = new mapboxgl.LngLatBounds();
@@ -28,6 +28,14 @@ locations.forEach((loc) => {
     .setLngLat(loc.coordinates)
     .addTo(map);
 
+  //Add popup
+  new mapboxgl.Popup({
+    offset: 30,
+  })
+    .setLngLat(loc.coordinates)
+    .setHTML(`<p>${loc.day}:${loc.description}</p>`)
+    .addTo(map);
+
   // Extend map bounds to include current location
   bounds.extend(loc.coordinates);
 });
@@ -35,7 +43,7 @@ locations.forEach((loc) => {
 map.fitBounds(bounds, {
   padding: {
     top: 200,
-    bottom: 200,
+    bottom: 150,
     left: 100,
     right: 100,
   },
