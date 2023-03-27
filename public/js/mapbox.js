@@ -12,3 +12,31 @@ const map = new mapboxgl.Map({
   style: 'mapbox://styles/soulshard/clfrcf9th011501pe6krhexfc', // style URL
   center: [-74.5, 40], // starting position [lng, lat]
 });
+
+const bounds = new mapboxgl.LngLatBounds();
+
+locations.forEach((loc) => {
+  //Crate marker
+  const el = document.createElement('div');
+  el.className = 'marker';
+
+  //Add marker
+  new mapboxgl.Marker({
+    element: el,
+    anchor: 'bottom',
+  })
+    .setLngLat(loc.coordinates)
+    .addTo(map);
+
+  // Extend map bounds to include current location
+  bounds.extend(loc.coordinates);
+});
+
+map.fitBounds(bounds, {
+  padding: {
+    top: 200,
+    bottom: 200,
+    left: 100,
+    right: 100,
+  },
+});
