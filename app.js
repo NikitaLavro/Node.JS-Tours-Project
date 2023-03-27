@@ -25,7 +25,7 @@ const viewRouter = require('./routes/viewRoutes');
 //MIDDLEWARES
 
 //Security HTTP headers
-app.use(helmet());
+// app.use(helmet());
 
 //Limit request from same API
 const limiter = rateLimit({
