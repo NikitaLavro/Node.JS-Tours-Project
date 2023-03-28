@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 //APP IMPORTS
 const AppError = require('./utils/appError');
@@ -40,6 +41,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 //Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,6 +55,7 @@ app.use(xss());
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 
