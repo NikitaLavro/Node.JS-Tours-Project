@@ -65,8 +65,6 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  console.log(user);
-
   //3) If everything ok, send the token to the client
   createAndSendToken(user, 200, res);
 });
@@ -91,7 +89,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //2) Verification
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
 
   //3) Check if users still exists
   const currentUser = await User.findById(decoded.id);
@@ -120,7 +117,6 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    console.log(decoded);
 
     //2) Check if users still exists
     const currentUser = await User.findById(decoded.id);
