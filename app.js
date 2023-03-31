@@ -76,9 +76,6 @@ app.use(
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-//Global error handling
-app.use(globalErrorHandler);
-
 //APP ROUTER
 
 app.use('/', viewRouter);
@@ -89,5 +86,8 @@ app.use('/api/v1/reviews', reviewRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl}`), 404);
 });
+
+//Global error handling
+app.use(globalErrorHandler);
 
 module.exports = app;
