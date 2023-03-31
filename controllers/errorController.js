@@ -1,71 +1,102 @@
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
-  const message = `Invalid ${err.path}: ${err.value}`;
+  const message = `Invalid ${err.path}: ${err.value}.`;
   return new AppError(message, 400);
 };
 
-const handleDuplicateFieldsDB = () => {
-  const message = `Duplicate field value. Please use another value`;
+const handleDuplicateFieldsDB = (err) => {
+  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(value);
+
+  const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
+
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new AppError(message, 400);
 };
 
 const handleJWTError = () =>
-  new AppError('Invalid token. Please log in again', 401);
+  new AppError('Invalid token. Please log in again!', 401);
 
 const handleJWTExpiredError = () =>
-  new AppError('Your token has expired! Please log in again', 401);
+  new AppError('Your token has expired! Please log in again.', 401);
 
 const sendErrorDev = (err, req, res) => {
-  //API
+  // A) API
   if (req.originalUrl.startsWith('/api')) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       error: err,
       message: err.message,
       stack: err.stack,
     });
-  } else {
-    //RENDERED WEBSITE
-    res.status(err.statusCode).render('error', {
-      title: 'Something went wrong',
-      msg: err.message,
-    });
   }
+
+  // B) RENDERED WEBSITE
+  console.error('ERROR 💥', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: err.message,
+  });
 };
 
 const sendErrorProd = (err, req, res) => {
-  err.isOperational = true;
-  if (err.isOperational) {
-    console.log('ERROR OP', err);
-    //Operational, trusted error: send message to the client
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message || Object.entries(err.errors)[0][1].message || err, //TEMPORARY ERROR HANDLING FIX
+  // A) API
+  if (req.originalUrl.startsWith('/api')) {
+    // A) Operational, trusted error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
+    // B) Programming or other unknown error: don't leak error details
+    // 1) Log error
+    console.error('ERROR 💥', err);
+    // 2) Send generic message
+    return res.status(500).json({
+      status: 'error',
+      message: 'Something went very wrong!',
     });
-  } else {
-    //Programming or other unknown error: don't leak error details
-    console.error(`ERROR PROG`, err);
   }
+
+  // B) RENDERED WEBSITE
+  // A) Operational, trusted error: send message to client
+  if (err.isOperational) {
+    console.log(err);
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message,
+    });
+  }
+  // B) Programming or other unknown error: don't leak error details
+  // 1) Log error
+  console.error('ERROR 💥', err);
+  // 2) Send generic message
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: 'Please try again later.',
+  });
 };
 
 module.exports = (err, req, res, next) => {
+  // console.log(err.stack);
+
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('DEVELOPMENT', err);
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    console.log('PRODUCTION', error);
-    if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
+    error.message = err.message;
+
+    if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
