@@ -12354,20 +12354,22 @@ if (userPasswordForm) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault();
+            document.querySelector('.btn--save--password').textContent = 'Updating...';
             passwordCurrent = document.getElementById('password-current').value;
             password = document.getElementById('password').value;
             passwordConfirm = document.getElementById('password-confirm').value;
-            _context.next = 6;
+            _context.next = 7;
             return (0, _updateSettings.updateSettings)({
               passwordCurrent: passwordCurrent,
               password: password,
               passwordConfirm: passwordConfirm
             }, 'password');
-          case 6:
+          case 7:
+            document.querySelector('.btn--save--password').textContent = 'Save password';
             document.getElementById('password-current').value = '';
             document.getElementById('password').value = '';
             document.getElementById('password-confirm').value = '';
-          case 9:
+          case 11:
           case "end":
             return _context.stop();
         }
@@ -12403,7 +12405,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50768" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52148" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
