@@ -12,6 +12,7 @@ const {
   deleteMe,
   getMe,
   uploadUserPhoto,
+  resizeUserPhoto,
 } = require('../controllers/userController');
 
 const {
@@ -35,7 +36,7 @@ router.patch('/resetPassword/:token', resetPassword);
 //Requiring auth for all the routes below
 router.use(protect);
 
-router.patch('/updateMe', uploadUserPhoto, updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 router.delete('/deleteMe', deleteMe);
 router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getUser);
