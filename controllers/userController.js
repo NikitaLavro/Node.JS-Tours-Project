@@ -14,9 +14,20 @@ const multerStorage = multer.diskStorage({
   },
 });
 
-const upload = multer({ dest: 'public/img/users' });
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images', 400), false);
+  }
+};
 
-exports.uploadUserPhoto = upload.single('single');
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single('photo');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
