@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const multer = require('multer');
+
 const {
   getAllUsers,
   getUser,
@@ -24,6 +26,9 @@ const {
   logout,
 } = require('../controllers/authController');
 
+//Multer
+const upload = multer({ dest: 'public/img/users' });
+
 //Router
 router.post('/signup', signup);
 router.post('/login', login);
@@ -34,7 +39,7 @@ router.patch('/resetPassword/:token', resetPassword);
 //Requiring auth for all the routes below
 router.use(protect);
 
-router.patch('/updateMe', updateMe);
+router.patch('/updateMe', upload.single('photo'), updateMe);
 router.delete('/deleteMe', deleteMe);
 router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getUser);
