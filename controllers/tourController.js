@@ -32,10 +32,21 @@ exports.uploadTourImages = upload.fields([
 
 //upload.array('images', 5);
 
-exports.resizeTourImages = (req, res, next) => {
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
   console.log(req.files);
+
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  //1) Cover image
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  await sharp(req.file.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+  //2) Other images
   next();
-};
+});
 
 //Middlewares
 exports.aliasTopCheapTours = (req, res, next) => {
