@@ -25,6 +25,18 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+
+//upload.array('images', 5);
+
+exports.resizeTourImages = (req, res, next) => {
+  console.log(req.files);
+  next();
+};
+
 //Middlewares
 exports.aliasTopCheapTours = (req, res, next) => {
   req.query.limit = '5';
