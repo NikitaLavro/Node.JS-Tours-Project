@@ -10,7 +10,7 @@ module.exports = class Email {
     this.from = `Nikita Lavro <${process.env.EMAIL_FROM}>`;
   }
 
-  createTransport() {
+  newTransport() {
     if (process.env.NODE_ENV === 'production') {
       //Sendgrid
       return 1;
@@ -27,7 +27,7 @@ module.exports = class Email {
   }
 
   //Send the actual email
-  send(template, subject) {
+  async send(template, subject) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(`${__dirname}/..views/emails/${template}.pug`, {
       firstName: this.firstName,
@@ -44,21 +44,10 @@ module.exports = class Email {
       html,
     };
     // 3) Create a transport and send email
+    await this.newTransport().sendMail(mailOptions);
   }
 
-  sendWelcome() {
-    this.send('welcome', 'Welcome to the Natours family');
+  async sendWelcome() {
+    await this.send('welcome', 'Welcome to the Natours family');
   }
-};
-
-const sendEmail = async (options) => {
-  //2) Define the email options
-  const mailOptions = {
-    from: 'Nikita Lavro <lavronikita.dev@gmail.com>',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-  };
-  //3) Actually send the email
-  await transporter.sendMail(mailOptions);
 };
