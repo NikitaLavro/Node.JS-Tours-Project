@@ -23,6 +23,24 @@ module.exports = class Email {
       },
     });
   }
+
+  //Send the actual email
+  send(template, subject) {
+    // 1) Render HTML based on a pug template
+    // 2) Define email options
+    const mailOptions = {
+      from: 'Nikita Lavro <lavronikita.dev@gmail.com>',
+      to: options.email,
+      subject: options.subject,
+      text: options.message,
+      //html:
+    };
+    // 3) Create a transport and send email
+  }
+
+  sendWelcome() {
+    this.send('welcome', 'Welcome to the Natours family');
+  }
 };
 
 const sendEmail = async (options) => {
