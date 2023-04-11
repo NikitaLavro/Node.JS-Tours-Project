@@ -1,5 +1,5 @@
 const express = require('express');
-const { getCheckoutSession } = require('../controllers/reviewController');
+const { getCheckoutSession } = require('../controllers/bookingController');
 const { protect } = require('../controllers/authController');
 
 const router = express.Router();
