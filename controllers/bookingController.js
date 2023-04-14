@@ -3,7 +3,7 @@ const Booking = require('../models/bookingModel');
 const Tour = require('../models/tourModel');
 
 //Controllers
-const factory = require('../controllers/handlerFactory');
+const factory = require('./handlerFactory');
 
 //Utils
 const catchAsync = require('../utils/catchAsync');
@@ -56,6 +56,8 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 
   res.redirect(req.originalUrl.split('?')[0]);
 });
+
+exports.webhookCheckout = (req, res, next) => {};
 
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);

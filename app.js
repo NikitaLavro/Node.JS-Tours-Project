@@ -16,6 +16,7 @@ const cors = require('cors');
 //APP IMPORTS
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const bookingController = require('./controllers/bookingController');
 
 const app = express();
 
@@ -48,6 +49,12 @@ app.use('/api', limiter);
 
 //Development logging
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 //Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
