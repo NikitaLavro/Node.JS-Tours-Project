@@ -36,7 +36,7 @@ app.use(cors());
 app.options('*', cors());
 
 //Security HTTP headers
-app.use(helmet());
+//app.use(helmet());
 
 //Limit request from same API
 const limiter = rateLimit({
