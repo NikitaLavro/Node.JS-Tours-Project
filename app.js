@@ -11,6 +11,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 //APP IMPORTS
 const AppError = require('./utils/appError');
@@ -30,8 +31,12 @@ const bookingRouter = require('./routes/bookingRoutes');
 
 //MIDDLEWARES
 
+//CORS
+app.use(cors());
+app.options('*', cors());
+
 //Security HTTP headers
-// app.use(helmet());
+app.use(helmet());
 
 //Limit request from same API
 const limiter = rateLimit({
