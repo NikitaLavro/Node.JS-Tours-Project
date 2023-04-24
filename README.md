@@ -1,3 +1,5 @@
+*USE laura@example.com / test1234 FOR LOGGING IN*
+
 #Title
 
 Node.JS-Tours-Project
